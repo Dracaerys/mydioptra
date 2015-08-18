@@ -6,8 +6,8 @@ function login() {
 
     $conn = open_database_connection();
 	
-	$username = 'admin'; //$_POST['username'];
-	$password = 'test';//$_POST['password'];
+	$username = $_POST['username'];
+	$password = $_POST['password'];
 	
     // Query the table
     $sql_command = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
@@ -17,8 +17,9 @@ function login() {
 	if ($check == 1) {
 		echo "Logged In";
 		session_start();
-		$_SESSION["username"] = $username;
-		$_SESSION["password"] = $password;	
+		$_SESSION["loginStatus"] = "true";
+		$referer = "/mydioptra/index.php";
+		header("Location: $referer");
 	} elseif ($check == 0) {
 		echo "No such user found";
 	} else {
@@ -27,31 +28,25 @@ function login() {
 	
     close_database_connection($conn);
 
-	echo $_SESSION["username"];
+	
 }
 ?>
 
 
 <?php
 //////Controller/////
-$booksByCat = login();
+if (isset($_POST["submit"])) {
+	login();
+}
+
 ?>
 
 
 <!-----View----->
-<?php $counter=0; ?>
- <?php foreach ($booksByCat as $book) { ?>
-<div class="Productlist">
-    <div><a title="<?php echo $book['Title'];?>" href="bookDetails.php?ID=<?php echo $book["bookID"] ?>"><img src="<?php echo $book["thumbnail"] ?>" alt="<?php echo $book["Title"] ?>"></a></div>
-    <div><a title="<?php echo $book['Title'];?>" href="bookDetails.php?ID=<?php echo $book["bookID"] ?>"><?php echo $book["Title"] ?></a></div>
-    <div><a style="color: crimson"title="<?php echo $book['authorName'] ?>" href="authorDetails.php?authorID=<?php echo $book['authorID'] ?>"><?php echo $book['authorName'] ?></a></div>
-    <div><?php echo substr($book['shortDescription'], 0, 70) . '...';?></div>
-    <div>&nbsp</div>
-
-</div>
-<?php
-$counter++;
-if ($counter % 5 ==0) {
-    echo '<br class="clearfloat">';
-}
-         } ?>
+<form action="login.php" method="POST">
+	<input name="username" placeholder="Username">
+	<br>
+	<input name="password" placeholder="Password">
+	<br>
+	<input name="submit" type="submit" value="Log In">
+</form>

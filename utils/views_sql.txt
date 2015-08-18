@@ -1,0 +1,10 @@
+
+
+// this is view vBooks
+
+SELECT books.*, authors.authorName, categories.catName
+FROM books
+JOIN authors
+ON books.authorID=authors.authorID
+JOIN categories
+ON books.catID=categories.catID ;

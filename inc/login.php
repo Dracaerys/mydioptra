@@ -21,7 +21,7 @@ function login() {
 		$referer = "/mydioptra/index.php";
 		header("Location: $referer");
 	} elseif ($check == 0) {
-		echo "No such user found";
+		echo "No such user found. Please try again.";
 	} else {
 		echo "Hacker Detected";
 	}

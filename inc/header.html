@@ -5,8 +5,15 @@
 </a>
 <div id="topmenu">
     <ul>
-        <li><a href="inc/login.php">Είσοδος | Εγγραφή</a></li>
-		<li><a href="inc/logout.php">Log Out</a></li>
+		<?php 
+			session_start();
+			if (!isset($_SESSION['loginStatus'])) {
+				echo '<li><a href="inc/login.php">Είσοδος | Εγγραφή</a></li>';
+			} else {
+				echo '<li><a href="inc/logout.php">Log Out</a></li>';
+			}
+			
+		?>
         <li><a href="#">Κατάσταση Παραγγελίας</a></li>
         <li><a href="inc/wishlist.php">Wishlist</a></li>
         <li><a href="#">Βοήθεια</a></li>

@@ -1,7 +1,10 @@
-<?php 
-	print_r($_POST);
-	include("../../inc/dbconn.php");
+<?php   
+        header('Content-Type: text/html; charset=utf-8');
+	//print_r($_POST);
 	
+        include_once("../../inc/dbconn.php");
+	
+        $conn = open_database_connection();
 	$sql_command2 = 'SELECT * FROM authors';
 	$result = mysqli_query($conn, $sql_command2);
 	$authors = array();

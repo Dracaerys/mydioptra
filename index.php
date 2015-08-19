@@ -7,11 +7,11 @@
     </head>
     <body>
         <div class="header">
-            <?php include 'inc/header.html' ?>
+            <?php include 'inc/header.php' ?>
         </div>
         <div class="container">
             <div class="navbar">
-                <?php include 'inc/navbar.html' ?>
+                <?php include 'inc/navbar.php' ?>
             </div>
             <div class="breadcrumbs">
                 breadcrumbs
@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="footer">
-            <?php include("inc/footer.html") ?>
+            <?php include("inc/footer.php") ?>
         </div>
     </body>
 </html>

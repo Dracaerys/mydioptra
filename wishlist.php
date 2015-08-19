@@ -20,7 +20,7 @@
                 <?php include 'inc/categories.php' ?>
             </div>
             <div class="content">
-                <?php include("inc/category.php") ?>
+                <?php include("inc/wishlist.php") ?>
             </div>
         </div>
         <div class="footer">

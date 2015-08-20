@@ -17,7 +17,7 @@ function login() {
     if ($check == 1) {
         echo "Logged In";
         session_start();
-        $_SESSION["loginStatus"] = "true";
+        $_SESSION["loginStatus"] = "user";
         //redirect the user back to where he came from
         $referer = '/mydioptra/' . $_GET['comefrom'];
         header("Location: $referer");

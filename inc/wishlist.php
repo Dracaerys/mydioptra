@@ -3,7 +3,7 @@
 
 if (!isset($_SESSION['loginStatus'])) {
     echo 'access denied';
-    header('Location: login.php?comefrom=' . $_GET['comefrom']);
+    header('Location: login.php?comefrom=wishlist.php');
 }
 ?>
 

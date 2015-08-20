@@ -9,14 +9,14 @@
         session_start();
         //display link depending on staus
         if (!isset($_SESSION['loginStatus'])) {
-            echo '<li><a href="login.php?comefrom=account.php">Είσοδος | Εγγραφή</a></li>';
+            echo '<li><a href="account.php">Είσοδος | Εγγραφή</a></li>';
         } else {
             echo '<li><a href="account.php">Ο λογαριασμός μου</a></li>';
             echo '<li><a href="inc/logout.php">Αποσύνδεση</a></li>';
         }
         ?>
         <li><a href="#">Κατάσταση Παραγγελίας</a></li>
-        <li><a href="wishlist.php?comefrom=wishlist.php">Wishlist</a></li>
+        <li><a href="wishlist.php">Wishlist</a></li>
         <li><a href="#">Βοήθεια</a></li>
     </ul>
 </div>

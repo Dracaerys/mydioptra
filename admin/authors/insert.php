@@ -1,43 +1,43 @@
-<?php 
-	print_r($_POST);
-	
-	function insertOneAuthor() {
-		include("../../inc/dbconn.php");
-		$authorName = $_POST['authorName'];
-		$authorImage = $_POST['authorImage'];
-		$authorDescription = $_POST['authorDescription'];
-		echo('function called');
-		if ($authorName == '') {
-			echo "Author Name is required";
-			exit;
-		}
-		if ($authorImage == '') {
-			$authorImage = 'default.jpg';
-		}
-		$sql_command = "INSERT INTO authors (authorID, authorName, authorImage, authorDescription) VALUES (NULL, '$authorName', '$authorImage', '$authorDescription')";
-		echo $sql_command;
-		mysqli_query($conn, $sql_command);
-		
-		
-		mysqli_close($conn);
-		
-	}
-	
-	if (isset($_POST['submit'])) {
-		insertOneAuthor();
-		header('Location: list.php');
-	}
+<?php
+header('Content-Type: text/html; charset=utf-8');
+/////Model/////
+include_once("../../inc/dbconn.php");
+
+function insert_form_data($tablename, $arr_post) {
+
+    $conn = open_database_connection();
+
+    //Remove the last element of the arrays wich is the submit button
+    array_pop($arr_post);
+
+    //Separate the keys from the values
+    $arr_fields = array_keys($arr_post);
+    $arr_values = array_values($arr_post);
+
+    // Query the table
+    $sql_command = "INSERT INTO $tablename (" . implode(', ', $arr_fields) . ") VALUES ('" . implode("', '", $arr_values) . "')";
+    echo $sql_command . '<br>';
+    $result = mysqli_query($conn, $sql_command) or die(mysqli_error($conn));
+
+    close_database_connection($conn);
+}
 ?>
 
-<form action="insert.php" method="POST">
-	Name
-	<input name="authorName">
-	<br>
-	Image
-	<input name="authorImage" value="default.jpg">
-	<br>
-	Description
-	<input name="authorDescription">
-	<br>
-	<input type="submit" name="submit">
-</form>
+
+<?php
+//////Controller/////
+$tablename = 'authors';
+$arr_post = $_POST;
+
+if (isset($_POST['submit'])) {
+    insert_form_data($tablename, $arr_post);
+    header('Location: list.php');
+}
+
+$form_title = 'Insert record';
+?>
+
+<?php
+/////View/////
+include 'form.php';
+?>

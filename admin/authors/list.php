@@ -1,56 +1,87 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
-
-//Model 
+/////Model/////
 include_once("../../inc/dbconn.php");
 
-function getAllauthors() {
+function get_all_items($tablename, $where_clause = '', $extras = '', $show_sql) {
 
     $conn = open_database_connection();
 
-    $sql_command = 'SELECT * FROM authors';
-    $result = mysqli_query($conn, $sql_command);
-    $authors = array();
-    while ($row = mysqli_fetch_assoc($result)) {
-        $authors[] = $row;
+    //Formulate the sql command
+    $sql_command = "SELECT * FROM $tablename";
+    if (!$where_clause == '') {
+        $sql_command .= ' ' . $where_clause;
     }
+    if (!$extras == '') {
+        $sql_command .= ' ' . $extras;
+    }
+    if ($show_sql == 1) {
+        echo $sql_command . '<br>';
+    }
+    // Query the table
+    $result = mysqli_query($conn, $sql_command) or die(mysqli_error($conn));
+
+    //Load the resultset into an array
+    $items = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $items[] = $row;
+    }
+
     close_database_connection($conn);
 
-    return $authors;
+    return $items;
 }
 ?>
 
+
 <?php
-//Controller
-$authors = getAllauthors();
+//////Controller/////
+$tablename = 'authors';
+$where_clause = '';    //'WHERE authorID = ' . $_GET['authorID'];
+$extras = '';          //'ORDER BY authorName DESC LIMIT 10';
+$show_sql = true;
+
+$items = get_all_items($tablename, $where_clause, $extras, $show_sql);
+
+//For the links on the table
+$primary_key = 'authorID';
 ?>
 
+
 <!--View-->
-<table border='1'>
-    <tr>
-        <td class="update"></td>
-        <td class="delete"></td>
-        <td class="id">ID</td>
-        <td class="title">Name</td>
-        <td class="author">Image</td>
-        <td class="catID">Desc</td>
-    </tr>
-    <tr>
-        <td class="update"></td>
-        <td class="delete"></td>
-        <td class="id"></td>
-        <td class="title"><a href="insert.php">Insert</a></td>
-        <td class="author"></td>
-        <td class="catID"></td>
-    </tr>
-    <?php foreach ($authors as $author) : ?>
-        <tr>
-            <td class="update"><a href="update.php?authorID=<?php echo $author["authorID"] ?>">Update</td>
-            <td class="delete"><a href="delete.php?authorID=<?php echo $author["authorID"] ?>">Delete</td>
-            <td class="id"><?php echo $author["authorID"]; ?> </td>
-            <td class="title"><a href="authorDetails.php?ID=<?php echo $author["authorID"] ?>"><?php echo $author["authorName"]; ?></a></td>
-            <td class="author"><?php echo $author["authorImage"]; ?> </td>
-            <td class="catID" style="max-width: 200px"><?php echo substr($author["authorDescription"], 0, 60) . "..."; ?> </td>
-        </tr>
-    <?php endforeach ?>
-</table>
+<h2><?php echo $tablename ?></h2>
+<style>
+    table{
+        border: 2px solid black;
+        border-collapse: collapse;
+    }
+    td {
+        padding: 5px; border: 1px solid gray;
+    }
+    th {
+        padding: 10px; 
+    }
+</style>
+<?php
+echo "<table border='1'>";
+//first row
+echo "<tr>";
+echo "<td><a href='insert.php'>Insert</a></td>";
+echo "<td></td>";
+foreach ($items[0] as $col => $cell) {
+    echo "<th>" . $col . "</th>";
+}
+echo "</tr>";
+
+//other rows
+foreach ($items as $rows => $row) {
+    echo "<tr>";
+    echo '<td><a href="update.php?' . $primary_key . '=' . $row[$primary_key] . '">Update</a></td>';
+    echo '<td><a href="delete.php?' . $primary_key . '=' . $row[$primary_key] . '">Delete</a></td>';
+    foreach ($row as $col => $cell) {
+        echo "<td>" . substr($cell, 0, 40) . "</td>";
+    }
+    echo "</tr>";
+}
+echo "</table>";
+?>

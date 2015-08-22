@@ -41,8 +41,8 @@ function get_one_item($tablename, $where_name, $where_value) {
 
 <?php
 //////Controller/////
-$tablename = 'authors';
-$where_name = 'authorID';
+$tablename = 'categories';
+$where_name = 'catID';
 $where_value = $_GET["$where_name"];
 
 if (isset($_POST['submit'])) {

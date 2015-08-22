@@ -36,7 +36,7 @@ function get_all_items($tablename, $where_clause = '', $extras = '', $show_sql) 
 
 <?php
 //////Controller/////
-$tablename = 'books';
+$tablename = 'categories';
 $where_clause = '';    //'WHERE authorID = ' . $_GET['authorID'];
 $extras = '';          //'ORDER BY authorName DESC LIMIT 10';
 $show_sql = true;
@@ -44,7 +44,7 @@ $show_sql = true;
 $items = get_all_items($tablename, $where_clause, $extras, $show_sql);
 
 //For the links on the table
-$primary_key = 'bookID';
+$primary_key = 'catID';
 ?>
 
 

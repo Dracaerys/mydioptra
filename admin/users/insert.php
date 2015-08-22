@@ -26,7 +26,7 @@ function insert_form_data($tablename, $arr_post) {
 
 <?php
 //////Controller/////
-$tablename = 'books';
+$tablename = 'users';
 $arr_post = $_POST;
 
 if (isset($_POST['submit'])) {

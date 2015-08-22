@@ -1,63 +1,76 @@
-<?php 
-	print_r($_POST);
-	
-	function updateOneAuthor($ID) {
-		include("../../inc/dbconn.php");
-		$authorName = $_POST['authorName'];
-		$authorImage = $_POST['authorImage'];
-		$authorDescription = $_POST['authorDescription'];
-		echo('function called');
-		if ($authorName == '') {
-			echo "Author Name is required";
-			exit;
-		}
-		if ($authorImage == '') {
-			$authorImage = 'default.jpg';
-		}
-		$sql_command = "UPDATE authors SET authorName = '$authorName', authorImage = '$authorImage', authorDescription = '$authorDescription' WHERE authorID = $ID";
-		echo $sql_command;
-		mysqli_query($conn, $sql_command);
-		
-		
-		mysqli_close($conn);
-		
-	}
-	
-	if (isset($_POST['submit'])) {
-		$ID = $_GET["authorID"];
-		updateOneAuthor($ID);
-		header('Location: list.php');
-	}
+<?php
+header('Content-Type: text/html; charset=utf-8');
+/////Model/////
+include_once("../../inc/dbconn.php");
+
+function update_form_data($tablename, $arr_post, $where_name, $where_value) {
+
+    $conn = open_database_connection();
+
+    //Remove the last element of the arrays wich is the submit button
+    array_pop($arr_post);
+
+    //Separate the keys from the values
+    $arr_fields = array_keys($arr_post);
+    $arr_values = array_values($arr_post);
+
+    //Formulate the sql command
+    $sql_command = "UPDATE $tablename SET ";
+    //Formulate the column = 'value'  pairs
+    for ($i = 0; $i < count($arr_fields); $i++) {
+        $str = "$arr_fields[$i] = '$arr_values[$i]'";
+        $arr_pairs[] = $str;
+    }
+    $sql_command .= implode(', ', $arr_pairs);
+    $sql_command .= " WHERE $where_name = $where_value LIMIT 1";
+    echo $sql_command . '<br>';
+
+    // Query the table
+    $result = mysqli_query($conn, $sql_command) or die(mysqli_error($conn));
+
+    close_database_connection($conn);
+}
+
+function get_one_item($tablename, $where_name, $where_value) {
+
+    $conn = open_database_connection();
+
+    // Query the table
+    $sql_command = "SELECT * FROM $tablename WHERE $where_name = $where_value LIMIT 1";
+    //echo $sql_command . '<br>';
+    $result = mysqli_query($conn, $sql_command) or die(mysqli_error($conn));
+
+    //Load the resultset into an array
+    $item = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $item = $row;
+    }
+
+    close_database_connection($conn);
+
+    return $item;
+}
 ?>
 
-<?php 
-	function getAuthor($ID) {
-		include("../inc/dbconn.php");
-		
-		$sql_command = 'SELECT * FROM authors WHERE authorID=' . $ID;
-		$result = mysqli_query($conn, $sql_command);
-		$author = array();
-		while($row = mysqli_fetch_assoc($result)) {
-			$author[] = $row;
-		}
-		mysqli_close($conn);
-		
-		$author = $author[0];
-		
-		return $author;
-	}
-	
-	$author = getAuthor($_GET["authorID"]);
+
+<?php
+//////Controller/////
+$tablename = 'books';
+$arr_post = $_POST;
+$where_name = 'bookID';
+$where_value = $_GET["$where_name"];
+
+if (isset($_POST['submit'])) {
+    update_form_data($tablename, $arr_post, $where_name, $where_value);
+    header('Location: list.php');
+}
+
+$item = get_one_item($tablename, $where_name, $where_value);
+
+$form_title = 'Update record';
 ?>
-<form action="update.php?authorID=<?php echo $_GET["authorID"]; ?>" method="POST">
-	Name
-	<input name="authorName" value="<?php echo $author["authorName"]; ?>">
-	<br>
-	Image
-	<input name="authorImage" value="<?php echo $author["authorImage"]; ?>">
-	<br>
-	Description
-	<input width="400" name="authorDescription" value="<?php echo $author["authorDescription"]; ?>">
-	<br>
-	<input type="submit" name="submit">
-</form>
+
+<?php
+/////View/////
+include 'form.php';
+?>

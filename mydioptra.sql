@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 17, 2015 at 07:45 PM
+-- Generation Time: Aug 22, 2015 at 01:45 PM
 -- Server version: 5.1.36
 -- PHP Version: 5.3.0
 
@@ -26,13 +26,13 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 
 CREATE TABLE IF NOT EXISTS `authors` (
-  `authorID` int(11) NOT NULL,
+  `authorID` int(11) NOT NULL AUTO_INCREMENT,
   `authorName` char(100) NOT NULL,
   `slug` char(100) NOT NULL,
   `authorImage` char(200) NOT NULL DEFAULT 'default.jpg',
   `authorDescription` mediumtext NOT NULL,
   PRIMARY KEY (`authorID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=383 ;
 
 --
 -- Dumping data for table `authors`
@@ -281,7 +281,7 @@ INSERT INTO `authors` (`authorID`, `authorName`, `slug`, `authorImage`, `authorD
 --
 
 CREATE TABLE IF NOT EXISTS `books` (
-  `bookID` int(11) NOT NULL,
+  `bookID` int(11) NOT NULL AUTO_INCREMENT,
   `authorID` int(11) NOT NULL,
   `catID` int(11) NOT NULL,
   `Title` varchar(100) NOT NULL,
@@ -296,7 +296,7 @@ CREATE TABLE IF NOT EXISTS `books` (
   `ebookPrice` decimal(6,2) NOT NULL,
   `theme` varchar(100) NOT NULL,
   PRIMARY KEY (`bookID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=477 ;
 
 --
 -- Dumping data for table `books`
@@ -748,12 +748,12 @@ INSERT INTO `books` (`bookID`, `authorID`, `catID`, `Title`, `slug`, `shortDescr
 --
 
 CREATE TABLE IF NOT EXISTS `categories` (
-  `catID` int(11) NOT NULL,
+  `catID` int(11) NOT NULL AUTO_INCREMENT,
   `catParent` int(11) NOT NULL DEFAULT '0',
   `catName` text NOT NULL,
   `catDescription` varchar(200) NOT NULL,
   PRIMARY KEY (`catID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=796 ;
 
 --
 -- Dumping data for table `categories`
@@ -1458,6 +1458,32 @@ INSERT INTO `scrape_books` (`bid`, `cid`, `slug`, `url`) VALUES
 (219, 716, 'Psithuroi-aggelon', '/Vivlio/219/716/Psithuroi-aggelon/'),
 (414, 721, 'Omofagiki-Diatrofi:-Almures-kai-glukes-suntages', '/Vivlio/414/721/Omofagiki-Diatrofi:-Almures-kai-glukes-suntages/'),
 (253, 719, 'Os-pote-tha-diavazo', '/Vivlio/253/719/Os-pote-tha-diavazo/');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `userID` int(11) NOT NULL AUTO_INCREMENT,
+  `firstname` varchar(40) NOT NULL,
+  `lastname` varchar(40) NOT NULL,
+  `email` varchar(40) NOT NULL,
+  `password` varchar(40) NOT NULL,
+  `status` varchar(5) NOT NULL DEFAULT 'user',
+  PRIMARY KEY (`userID`),
+  UNIQUE KEY `username` (`email`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`userID`, `firstname`, `lastname`, `email`, `password`, `status`) VALUES
+(1, '', '', 'test', 'test', 'user'),
+(2, '', '', 'test3', 'test3', 'user'),
+(3, '', '', 'admin', 'admin', 'admin');
 
 -- --------------------------------------------------------
 

@@ -6,18 +6,18 @@ function login() {
 
     $conn = open_database_connection();
 
-    $username = $_POST['username'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
     // Query the table
-    $sql_command = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+    $sql_command = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
     $result = mysqli_query($conn, $sql_command) or die(mysqli_error($conn));
-
+    $row = mysqli_fetch_assoc($result);
     $check = mysqli_num_rows($result);
     if ($check == 1) {
         echo "Logged In";
         session_start();
-        $_SESSION["loginStatus"] = "user";
+        $_SESSION["loginStatus"] = $row['status'];
         //redirect the user back to where he came from
         $referer = '/mydioptra/' . $_GET['comefrom'];
         header("Location: $referer");
@@ -42,7 +42,7 @@ if (isset($_POST["submit"])) {
 
 <!-----View----->
 <form action="" method="POST">
-    <input name="username" placeholder="Username">
+    <input name="email" placeholder="E-mail">
     <br>
     <input name="password" placeholder="Password">
     <br>
